@@ -4,9 +4,7 @@ import { PostProps } from "./types";
 
 async function fetchBlogs() {
   const res = await fetch("http://localhost:3000/api/blog", {
-    next: {
-      revalidate: 10,
-    },
+    cache: "no-store",
   });
 
   const data = await res.json();
