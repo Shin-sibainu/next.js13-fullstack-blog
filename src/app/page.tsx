@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <main className="w-full h-full">
-      <div className="md:w-2/4 sm:w-3/4 m-auto p-4 my-5 rounded-lg bg-slate-800 drop-shadow-xl">
+      <div className="md:w-2/4 sm:w-3/4 m-auto p-4 my-5 rounded-lg bg-blue-900 drop-shadow-xl">
         <h1 className="text-slate-200 text-center text-2xl font-extrabold">
           Full Stack Blog App
         </h1>
@@ -27,7 +27,7 @@ export default async function Home() {
       <div className="flex my-5">
         <Link
           href={"/blog/add"}
-          className=" md:w-1/6 sm:w-2/4 text-center rounded-md p-2 m-auto bg-slate-200 font-semibold"
+          className=" md:w-1/6 sm:w-2/4 text-center rounded-md p-2 m-auto bg-slate-300 font-semibold"
         >
           Add New Blog 🚀
         </Link>
