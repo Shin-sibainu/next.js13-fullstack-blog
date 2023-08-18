@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 type UpdateBlogParams = {
@@ -14,6 +14,22 @@ const updateBlog = async (data: UpdateBlogParams) => {
   const res = fetch(`http://localhost:3000/api/blog/${data.id}`, {
     method: "PUT",
     body: JSON.stringify({ title: data.title, description: data.description }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return (await res).json();
+};
+
+const getBlogById = async (id: number) => {
+  const res = await fetch(`http://localhost:3000/api/blog/${id}`);
+  const data = await res.json();
+  return data.post;
+};
+
+const deleteBlog = async (id: number) => {
+  const res = fetch(`http://localhost:3000/api/blog/${id}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
@@ -45,6 +61,27 @@ const EditBlog = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const handleDelete = async () => {
+    toast.loading("Deleting Blog", { id: "2" });
+    await deleteBlog(parseInt(params.id));
+  };
+
+  useEffect(() => {
+    toast.loading("Fetching Blog Details 🚀", { id: "1" });
+    getBlogById(parseInt(params.id))
+      .then((data) => {
+        if (titleRef.current && descriptionRef.current) {
+          titleRef.current.value = data.title;
+          descriptionRef.current.value = data.description;
+          toast.success("Fetching Completed", { id: "1" });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error Fetching Blog", { id: "1" });
+      });
+  }, []);
+
   return (
     <>
       <Toaster />
@@ -68,7 +105,10 @@ const EditBlog = ({ params }: { params: { id: string } }) => {
             <button className="font-semibold px-4 py-2 shadow-xl bg-slate-200 rounded-lg m-auto hover:bg-slate-100">
               Update
             </button>
-            <button className="ml-2 font-semibold px-4 py-2 shadow-xl bg-red-400 rounded-lg m-auto hover:bg-slate-100">
+            <button
+              onClick={handleDelete}
+              className="ml-2 font-semibold px-4 py-2 shadow-xl bg-red-400 rounded-lg m-auto hover:bg-slate-100"
+            >
               Delete
             </button>
           </form>

@@ -15,7 +15,7 @@ export async function main() {
 export const GET = async (req: Request, res: NextResponse) => {
   try {
     await main();
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({ orderBy: { date: "asc" } });
     return NextResponse.json({ message: "Success", posts }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ message: "Error", err }, { status: 500 });
